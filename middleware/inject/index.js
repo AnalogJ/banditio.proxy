@@ -3,6 +3,7 @@ module.exports = function(script) {
     return function(req, res, next) {
         //console.log('middleware', arguments)
         var _write = res.write,
+            _end = res.end,
             _writeHead = res.writeHead,
             isHtml = false;
 
@@ -10,14 +11,14 @@ module.exports = function(script) {
 
         // force uncompresed
         //req.headers['accept-encoding'] = '*;q=1,gzip=0';
-        console.log(req.headers)
         res.writeHead = function(code, headers) {
-            var content_type_header = res.getHeader('content-type');
+            var content_type_header = res.getHeader('content-type') || 'text/html';
             var content_length_header = res.getHeader('content-length')
             isHtml =  content_type_header && content_type_header.match('text/html');
-            isHtml;
-            //console.log("writeHead",headers, isHtml, res.getHeader('content-type'))
+
+
             if (isHtml){
+                console.log("writeHead",headers, isHtml, res.getHeader('content-type'))
                 console.log('current_header_length', parseInt(content_length_header))
                 console.log('new_header_length',  parseInt(content_length_header) + scriptElm.length)
                 //res.setHeader('content-length', parseInt(content_length_header) + scriptElm.length);
@@ -47,6 +48,11 @@ module.exports = function(script) {
             _write.call(res, data, encoding);
 
         }
+
+        res.end = function(data, encoding){
+            console.log(data)
+        }
+
         next();
     }
 }

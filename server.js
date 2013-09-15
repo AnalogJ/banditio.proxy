@@ -1,29 +1,35 @@
 var http = require('http'),
-    httpProxy = require('http-proxy');
+    httpProxy = require('http-proxy'),
+    fs = require('fs');
 //var bandit_inject = require('node-inject');
-var bandit_inject = require('./middleware/inject');
-var bandit_inflate = require('./middleware/inflate');
-var proxy_by_url = require('proxy-by-url')
+//var bandit_base = requre('./middleware/base')
+//var bandit_inject = require('./middleware/inject');
+//var bandit_inflate = require('./middleware/inflate');
+//var proxy_by_url = require('proxy-by-url')
 //
 // Create your proxy server
 //
 httpProxy.createServer(
-    bandit_inflate(),
-    bandit_inject("https://raw.github.com/btotr/node-inject/master/example/inject.js"),
-    proxy_by_url({
-        '/sparktree': { port: 80, host: 'www.sparktree.com' }
-    })
-
+    //bandit_inflate(),
+    //bandit_inject("https://raw.github.com/btotr/node-inject/master/example/inject.js")
+    //proxy_by_url({
+    //    '/example': { port: 80, host: 'www.thesparktree.com' }
+    //})
+    9000, 'localhost'
 ).listen(process.env.PORT ||8000);
 
-//
-// Create your target server
-//
-//http.createServer(function (req, res) {
-//    res.writeHead(200, { 'Content-Type': 'text/plain' });
-//    res.write('request successfully proxied!' + '\n' + JSON.stringify(req.headers, true, 2));
-//    res.end();
-//}).listen(9000);
+
+//create simple html response server.
+fs.readFile('./test.html', function (err, html) {
+    if (err) {
+        throw err;
+    }
+    http.createServer(function(request, response) {
+        response.writeHeader(200, {"Content-Type": "text/html"});
+        response.write(html);
+        response.end();
+    }).listen(9000);
+});
 
 
 

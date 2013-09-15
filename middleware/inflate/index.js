@@ -3,22 +3,25 @@ var zlib = require('zlib');
 module.exports = function(script) {
     return function(req, res, next) {
 
-         /*
+
         var data = [];
-        req.addListener("data", function(chunk) {
+        res.addListener("data", function(chunk) {
             data.push(new Buffer(chunk));
         });
-        req.addListener("end", function() {
+        res.addListener("end", function() {
             buffer = Buffer.concat(data);
             zlib.inflate(buffer, function(err, result) {
                 if (!err) {
-                    req.body = result.toString();
+                    console.log('body:', result.toString())
+                    res.body = result.toString();
                     next();
                 } else {
+                    console.log('err')
                     next(err);
                 }
             });
         });
+        /*
         //========= Based off this function
         res.write = function(chunk, encoding) {
             console.log("write", isHtml)
@@ -37,7 +40,7 @@ module.exports = function(script) {
             _write.call(res, data, encoding);
 
         }
-          */
+         */
         next();
 
 
