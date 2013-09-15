@@ -6,6 +6,8 @@
     "http-proxy": "~0.10.3",
     "vows": "~0.7.0",
     "proxy-by-url": "0.0.3",
-    "node-inject": "~0.1.0"
+    "node-inject": "~0.1.0",
+    "http-get": "~0.5.10",
+    "connect": "~2.9.0"
   }
 }
