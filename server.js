@@ -1,38 +1,64 @@
 var http = require('http'),
     httpProxy = require('http-proxy'),
-    fs = require('fs');
-//var bandit_inject = require('node-inject');
+    fs = require('fs'),
+    connect = require('connect');
 //var bandit_base = requre('./middleware/base')
 var bandit_inject = require('./middleware/inject');
-//var bandit_inflate = require('./middleware/inflate');
-//var proxy_by_url = require('proxy-by-url')
+var bandit_inflate = require('./middleware/inflate');
+var proxy_by_url = require('proxy-by-url')
+var injector = require('connect-injector');
+
+var inject = injector(function (req, res) {
+    return res.getHeader('content-type') && res.getHeader('content-type').indexOf('text/html') === 0;
+}, function (callback, data) {
+    callback(null, data.toString().replace('</body>', '<script type="text/javascript" scr="https://raw.github.com/btotr/node-inject/master/example/inject.js"></script></body>'));
+});
+
+
 //
 // Create your proxy server
 //
 httpProxy.createServer(
-    //bandit_inflate(),
-    bandit_inject("https://raw.github.com/btotr/node-inject/master/example/inject.js"),
+    connect.logger('dev'),
+    inject,
+    //bandit_inject("https://raw.github.com/btotr/node-inject/master/example/inject.js"),
     //proxy_by_url({
-    //    '/example': { port: 80, host: 'www.thesparktree.com' }
+    //    '/example': { port: 80, host: 'www.sparktree.com' }
     //})
     9000, 'localhost'
 ).listen(process.env.PORT ||8000);
 
 
 //create simple html response server.
-fs.readFile('./test.html', function (err, html) {
+
+// create a static gzipped server
+         /*
+connect.createServer(
+    //connect.compress(),
+    function(req, res, next) {
+        res.setHeader("Content-Type", "text/plain");
+        next();
+    },
+    connect.static(__dirname)
+
+
+).listen(9000);
+   */
+
+fs.readFile('./index.html', function (err, html) {
     if (err) {
         throw err;
     }
-    http.createServer(function(request, response) {
-        response.writeHeader(200, {"Content-Type": "text/html"});
-        response.write(html);
-        response.end();
-    }).listen(9000);
+    connect.createServer(
+
+        function(request, response) {
+            response.writeHeader(200, {"Content-Type": "text/html"});
+            response.write(html);
+            response.end();
+        },
+        connect.compress()
+    ).listen(9000);
 });
-
-
-
 
 
 
