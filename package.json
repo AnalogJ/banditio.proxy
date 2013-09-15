@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "A html proxy server",
   "dependencies": {
-    "http-proxy": "~0.10.3"
+    "http-proxy": "~0.10.3",
+    "vows": "~0.7.0",
+    "proxy-by-url": "0.0.3",
+    "node-inject": "~0.1.0"
   }
 }
