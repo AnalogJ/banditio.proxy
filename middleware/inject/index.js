@@ -21,7 +21,7 @@ module.exports = function(script) {
                 console.log("writeHead",headers, isHtml, res.getHeader('content-type'))
                 console.log('current_header_length', parseInt(content_length_header))
                 console.log('new_header_length',  parseInt(content_length_header) + scriptElm.length)
-                //res.setHeader('content-length', parseInt(content_length_header) + scriptElm.length);
+                res.setHeader('content-length', parseInt(content_length_header) + scriptElm.length);
             }
             _writeHead.apply(this, arguments);
         }
@@ -39,18 +39,14 @@ module.exports = function(script) {
                 console.log(str);
                 //var baseTag = '<base href="' + (dest.replace(/\/$/, '') || '') + '"/>';
 
-                //str = str.replace(/(<head[^>]*>)/, "$1"  + scriptElm );
+                str = str.replace(/(<head[^>]*>)/, "$1"  + scriptElm );
 
-                //data = new Buffer(str);
-                data = chunk;
+                data = new Buffer(str);
+                //data = chunk;
             }
 
             _write.call(res, data, encoding);
 
-        }
-
-        res.end = function(data, encoding){
-            console.log(data)
         }
 
         next();
