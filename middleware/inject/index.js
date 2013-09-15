@@ -34,8 +34,8 @@ module.exports = function(script) {
 
             */
             if (isHtml) {
-                //var str = chunk.toString();
-                //console.log(str);
+                var str = chunk.toString();
+                console.log(str);
                 //var baseTag = '<base href="' + (dest.replace(/\/$/, '') || '') + '"/>';
 
                 //str = str.replace(/(<head[^>]*>)/, "$1"  + scriptElm );

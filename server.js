@@ -2,17 +2,17 @@ var http = require('http'),
     httpProxy = require('http-proxy');
 //var bandit_inject = require('node-inject');
 var bandit_inject = require('./middleware/inject');
-//var bandit_inflate = require('./middleware/inflate');
+var bandit_inflate = require('./middleware/inflate');
 var proxy_by_url = require('proxy-by-url')
 //
 // Create your proxy server
 //
 httpProxy.createServer(
+    bandit_inflate(),
     bandit_inject("https://raw.github.com/btotr/node-inject/master/example/inject.js"),
     proxy_by_url({
         '/sparktree': { port: 80, host: 'www.sparktree.com' }
     })
-    //bandit_inflate(),
 
 ).listen(process.env.PORT ||8000);
 
