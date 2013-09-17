@@ -1,14 +1,18 @@
-{
-  "name": "bandit.io-proxy",
+{ "name": "mitm-proxy",
   "version": "0.0.1",
-  "description": "A html proxy server",
-  "dependencies": {
-    "http-proxy": "~0.10.3",
-    "vows": "~0.7.0",
-    "proxy-by-url": "0.0.3",
-    "node-inject": "~0.1.0",
-    "http-get": "~0.5.10",
-    "connect": "~2.9.0",
-    "connect-injector": "~0.2.2"
+  "author": "Horaci Cuevas",
+  "contributors": [
+    { "name": "Horaci Cuevas", "email": "horaci@gmail.com" }
+  ],
+  "description" : "A node module to create a http and https man-in-the-middle proxy",
+  "main" : "proxy",
+  "engines" : { "node": ">0.4.0" },
+  "keywords" : [ "proxy", "mitm", "http", "https" ],
+  "dependencies" : {
+    "colors" : ">=0.1.0"
+  },
+  "repository" : { 
+    "type": "git", 
+    "url": "http://github.com/horaci/node-mitm-proxy.git"
   }
 }
