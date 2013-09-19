@@ -132,7 +132,22 @@ module.exports = function(proxy_options, processor_class) {
   mitm_server.listen(this.options.mitm_port);
   if(this.options.verbose) console.log('https man-in-the-middle proxy server'.blue + ' started '.green.bold + 'on port '.blue + (""+this.options.mitm_port).yellow);
 
+  /*
+  * Configuration for the proxy server. This is the application that recieves http requests from your device and webrequests
+  *
+    *  */
   var server = http.createServer(function(request, response) {
+      console.log(request.headers)
+      var proxy_auth_header = request.headers['proxy-authorization'] || '',        // get the header
+          token= proxy_auth_header.split(/\s+/).pop()||'',            // and the encoded auth token
+          auth=new Buffer(token, 'base64').toString(),    // convert from base64
+          parts=auth.split(/:/),                          // split on colon
+          username=parts[0],
+          password=parts[1];
+
+      response.writeHead(200,{'Content-Type':'text/plain'});
+      response.end('username is "'+username+'" and password is "'+password+'"');
+      return
     handle_request(that, request, response, "http");
   });
 
