@@ -137,6 +137,9 @@ module.exports = function(proxy_options, processor_class) {
   *
     *  */
   var server = http.createServer(function(request, response) {
+      /*
+      //Proxy Documentation
+      //https://kb.bluecoat.com/index?page=content&id=KB2931
       console.log(request.headers)
       var proxy_auth_header = request.headers['proxy-authorization'] || '',        // get the header
           token= proxy_auth_header.split(/\s+/).pop()||'',            // and the encoded auth token
@@ -148,6 +151,7 @@ module.exports = function(proxy_options, processor_class) {
       response.writeHead(200,{'Content-Type':'text/plain'});
       response.end('username is "'+username+'" and password is "'+password+'"');
       return
+      */
     handle_request(that, request, response, "http");
   });
 
