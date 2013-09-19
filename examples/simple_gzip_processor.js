@@ -1,11 +1,11 @@
 var Proxy = require('../proxy.js')
   , URL = require('url');
-
+var zlib = require('zlib');
 // Processor 
 simpleProcessor = function(proxy) {
   var url;
-   var bufs = [];
-
+  var bufs = [];
+  var resp_content_encoding = '';
   proxy.on('request', function(request, req_url) {
     url = req_url;
     //console.log("[" + url.hostname + url.pathname + "] - Processor request event, url: " + URL.format(req_url));
@@ -14,7 +14,8 @@ simpleProcessor = function(proxy) {
 
   proxy.on('response', function(response) {
     console.log("[" + url.hostname + url.pathname + "] - Processor response event, response server header: " + response.headers.server);
-      console.log('Response Headers',response.headers)
+    console.log('Response Headers',response.headers)
+    resp_content_encoding =  response.headers['content-encoding']
   });
 
   proxy.on('response_data', function(data) {
@@ -26,7 +27,20 @@ simpleProcessor = function(proxy) {
   proxy.on('response_end', function() {
     console.log("[" + url.hostname + url.pathname + "] - Processor response end event");
       var buf = Buffer.concat(bufs);
-      //console.log(buf.toString());
+      if(resp_content_encoding == 'gzip'){
+          zlib.gunzip(buf, function(err, result){
+              console.log(result.toString())
+          });
+      }
+      else if(resp_content_encoding ==  'deflate'){
+          zlib.inflate(bug, function(err, result){
+            console.log(result.toString())
+          })
+      }
+      else{
+          console.log(buf.toString());
+      }
+
   });
 };
 

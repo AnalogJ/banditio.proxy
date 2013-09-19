@@ -1,5 +1,31 @@
 #bandit.proxy based off [node-mitm-proxy](https://github.com/horaci/node-mitm-proxy)
 
+#Curl Commmands for testing:
+
+##basic testing
+curl -x http://localhost:8080 http://www.example.com
+curl -x http://localhost:8080 http://www.cnn.com
+curl -x http://localhost:8080 http://www.sparktree.com
+
+##gzip testing
+curl -H "Accept-Encoding: gzip,deflate,sdch" -x http://localhost:8080 http://www.sparktree.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Creates a http and https proxy that allows to intercept requests, rewrite urls and store data on disk.
 
 ## Example Use
