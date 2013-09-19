@@ -17,7 +17,8 @@ simpleProcessor = function(proxy) {
 
   proxy.on('response_data', function(data) {
    console.log("[" + url.hostname + url.pathname + "] - Processor response data event, length: " + data.length);
-      bufs.push(d);
+
+      bufs.push(data);
   });
 
   proxy.on('response_end', function() {
