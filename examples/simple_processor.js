@@ -4,7 +4,8 @@ var Proxy = require('../proxy.js')
 // Processor 
 simpleProcessor = function(proxy) {
   var url;
-  
+   var bufs = [];
+
   proxy.on('request', function(request, req_url) {
     url = req_url;
     console.log("[" + url.hostname + url.pathname + "] - Processor request event, url: " + URL.format(req_url));
@@ -16,10 +17,13 @@ simpleProcessor = function(proxy) {
 
   proxy.on('response_data', function(data) {
    console.log("[" + url.hostname + url.pathname + "] - Processor response data event, length: " + data.length);
+      bufs.push(d);
   });
 
   proxy.on('response_end', function() {
     console.log("[" + url.hostname + url.pathname + "] - Processor response end event");
+      var buf = Buffer.concat(bufs);
+      console.log(buf.toString());
   });
 };
 
