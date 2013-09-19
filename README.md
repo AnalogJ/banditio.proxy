@@ -1,4 +1,4 @@
-# node-mitm-proxy
+#bandit.proxy based off [node-mitm-proxy](https://github.com/horaci/node-mitm-proxy)
 
 Creates a http and https proxy that allows to intercept requests, rewrite urls and store data on disk.
 
