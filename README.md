@@ -13,7 +13,8 @@ curl -H "Accept-Encoding: gzip,deflate,sdch" -x http://localhost:8080 http://www
 ##proxy user/pass testing
 curl -x http://localhost:8080 -U proxyUser:proxyPass http://www.example.com
 
-
+#generating requests
+http://www.flatmtn.com/article/setting-openssl-create-certificates
 
 
 
