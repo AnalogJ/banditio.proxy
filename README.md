@@ -3,19 +3,34 @@
 #Curl Commmands for testing:
 
 ##basic testing
-curl -x http://localhost:8080 http://www.example.com
-curl -x http://localhost:8080 http://www.cnn.com
-curl -x http://localhost:8080 http://www.sparktree.com
+
+- curl -x http://localhost:8080 http://www.example.com
+- curl -x http://localhost:8080 http://www.cnn.com
+- curl -x http://localhost:8080 http://www.sparktree.com
 
 ##gzip testing
-curl -H "Accept-Encoding: gzip,deflate,sdch" -x http://localhost:8080 http://www.sparktree.com
+
+- curl -H "Accept-Encoding: gzip,deflate,sdch" -x http://localhost:8080 http://www.sparktree.com
 
 ##proxy user/pass testing
-curl -x http://localhost:8080 -U proxyUser:proxyPass http://www.example.com
+
+- curl -x http://localhost:8080 -U proxyUser:proxyPass http://www.example.com
 
 #generating requests
-http://www.flatmtn.com/article/setting-openssl-create-certificates
 
+- http://www.flatmtn.com/article/setting-openssl-create-certificates
+
+
+#Current Support
+
+- Readonly proxy
+- GZIP support
+- Username + Password support
+- Javascript injection
+
+#Current Todo
+
+- merge all the different test cases togehter into one application
 
 
 
