@@ -12,21 +12,24 @@ simpleProcessor = function(proxy) {
       console.log('Request Headers',request.headers)
   }
 
-    this.handle_response = function(response) {
+  this.handle_response = function(response) {
     console.log("[" + url.hostname + url.pathname + "] - Processor response event, response server header: " + response.headers.server);
-      console.log('Response Headers',response.headers)
+    console.log('Response Headers',response.headers)
   }
 
-    this.handle_response_data = function(data) {
-   console.log("[" + url.hostname + url.pathname + "] - Processor response data event, length: " + data.length);
-
-      bufs.push(data);
+  this.handle_response_data = function(data) {
+    console.log("[" + url.hostname + url.pathname + "] - Processor response data event, length: " + data.length);
+    bufs.push(data);
   }
 
-    this.handle_response_end = function() {
+  this.handle_response_end = function() {
     console.log("[" + url.hostname + url.pathname + "] - Processor response end event");
-      var buf = Buffer.concat(bufs);
-      //console.log(buf.toString());
+    var buf = Buffer.concat(bufs);
+    var scriptElm = "\n<script type='text/javascript' src='jquery.min.1.2.js'></script>\n";
+    if (true) {
+        output = buf.toString().replace(/(<head[^>]*>)/, "$1" + scriptElm)
+    }
+    console.log(output);
   }
 };
 

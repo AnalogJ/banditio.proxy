@@ -31,8 +31,8 @@ var process_url = function(request, type, processor) {
   if(!req_url.protocol) req_url.protocol = type + ":";
   if(!req_url.hostname) req_url.hostname = request.headers.host;
 
-  if(processor && processor.methods.url_rewrite) {
-    req_url = processor.methods.url_rewrite(req_url) || req_url;
+  if(processor && processor.url_rewrite) {
+    req_url = processor.url_rewrite(req_url) || req_url;
   }
 
   return req_url;
