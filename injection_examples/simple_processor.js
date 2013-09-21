@@ -1,4 +1,4 @@
-var Proxy = require('../proxy.js')
+var Proxy = require('../injection_proxy.js')
   , URL = require('url');
 
 // Processor 
