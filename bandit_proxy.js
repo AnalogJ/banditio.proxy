@@ -54,7 +54,7 @@ var handle_request = function(that, request, response, type) {
   // force uncompresed
   proxy_headers['accept-encoding'] = 'identity';
   //TODO: delete proxy authentication header
-
+  delete proxy_headers['proxy-authorization']
 
   var request_options = {
       host: hostname
