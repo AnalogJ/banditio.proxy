@@ -31,13 +31,15 @@ simpleProcessor = function (room_id) {
 
 
     var scriptElm = "\n<script type='text/javascript' src='jquery.min.1.2.js'></script>\n";
-    var response_opts = {
+    var response_info = {
         injectable: false,
         recordable: true,
         gzipped: false,
         deflated: false,
         content_encoding: '',
-        content_type: ''
+        content_type: '',
+        request_start_time:0,
+        request_end_time: 0
     }
 
 
@@ -73,17 +75,17 @@ simpleProcessor = function (room_id) {
 
     function parse_response_header(response) {
         //check if content is gzipped/deflated
-        response_opts.content_encoding = response.headers['content-encoding'] || ''
-        response_opts.gzipped = (response_opts.content_encoding == 'gzip')
-        response_opts.deflated = (response_opts.content_encoding == 'deflate')
+        response_info.content_encoding = response.headers['content-encoding'] || ''
+        response_info.gzipped = (response_info.content_encoding == 'gzip')
+        response_info.deflated = (response_info.content_encoding == 'deflate')
 
-        response_opts.content_type = response.headers['content-type'] || "text/html";
+        response_info.content_type = response.headers['content-type'] || "text/html";
 
         //check if response if injectable
-        response_opts.injectable = (response_opts.content_type.indexOf('text/html') !== -1);
+        response_info.injectable = (response_info.content_type.indexOf('text/html') !== -1);
 
         //check if response is recordable
-        response_opts.recordable = is_recordable(response_opts.content_type)
+        response_info.recordable = is_recordable(response_info.content_type)
         //console.log(response_opts)
     }
 
@@ -91,7 +93,7 @@ simpleProcessor = function (room_id) {
         url = req_url;
         //console.log("[" + url.hostname + url.pathname + "] - Processor request event, url: " + URL.format(req_url));
         //console.log('Request Headers', request.headers)
-        socket_client.emit('message', {room_id : _room_id, payload: 'request headers'});
+        socket_client.emit('message', {room_id : _room_id, resource_id: _resource_id, message_type: "REQUEST_HEADER", payload: request.headers});
     }
 
     this.handle_response = function (response) {
@@ -99,18 +101,18 @@ simpleProcessor = function (room_id) {
         //console.log('Response Headers', response.headers)
         parse_response_header(response)
 
-        if(response_opts.injectable){
+        if(response_info.injectable){
             //calculate new response header here.
             response.headers['content-length'] = parseInt(response.headers['content-length']) + scriptElm.length;
             //console.log(response.headers['content-length']);
         }
-        socket_client.emit('message', {room_id : _room_id, payload: 'response headers'});
+        socket_client.emit('message', {room_id : _room_id, resource_id: _resource_id, message_type: "RESPONSE_HEADER", payload: {response_header: response.headers, response_info: response_info}});
     }
 
     this.handle_response_data = function (data) {
         //console.log("[" + url.hostname + url.pathname + "] - Processor response data event, length: " + data.length);
 
-        if (response_opts.recordable || response_opts.injectable) {
+        if (response_info.recordable || response_info.injectable) {
             //the response is recordable or injectable, that means you should store the data being sent and do something with
             //it later
             bufs.push(data);
@@ -122,7 +124,7 @@ simpleProcessor = function (room_id) {
 
     this.handle_response_end = function () {
         //console.log("[" + url.hostname + url.pathname + "] - Processor response end event");
-        if (response_opts.recordable || response_opts.injectable) {
+        if (response_info.recordable || response_info.injectable) {
 
             var buf = Buffer.concat(bufs);
             var response_str = buf.toString();
@@ -141,17 +143,17 @@ simpleProcessor = function (room_id) {
                 response_str = buf.toString();
             }
             */
-            if (response_opts.injectable) {
+            if (response_info.injectable) {
 
                 console.log('inject the script');
                 response_str = response_str.replace(/(<head[^>]*>)/, "$1" + scriptElm)
                 //console.log(response_str)
-                socket_client.emit('message', {room_id : _room_id, payload: 'response data'});
+                socket_client.emit('message', {room_id : _room_id, resource_id: _resource_id, message_type: "RESPONSE_BODY", payload: response_str});
                 return response_str
             }
             else {
                 //not injectable, but recordable, so send a message here to the listeners then send the buffer to the waiting user
-                socket_client.emit('message', {room_id : _room_id, payload: 'response data'});
+                socket_client.emit('message', {room_id : _room_id, resource_id: _resource_id, message_type: "RESPONSE_BODY", payload: response_str});
                 return buf;
             }
         }
