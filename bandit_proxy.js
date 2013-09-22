@@ -167,8 +167,8 @@ module.exports = function(proxy_options, processor_class) {
           handle_request(that, request, response, "http");
       }
       else{
-          response.writeHead(407,{'Content-Type':'text/plain'});
-          response.end('the banditio proxy requires a username for tracking purposes. ');
+          response.writeHead(407,{'Content-Type':'text/html', 'Proxy-Authenticate' : 'Basic realm="Bandit.io Proxy"'});
+          response.end('<html><body>[Bandit.io] Proxy Authentication Required.<BR> </body></html>');
           return
       }
 
