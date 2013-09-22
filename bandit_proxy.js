@@ -152,7 +152,7 @@ module.exports = function(proxy_options, processor_class) {
   *
     *  */
   var server = http.createServer(function(request, response) {
-      /*
+
       //Proxy Documentation
       //https://kb.bluecoat.com/index?page=content&id=KB2931
       console.log(request.headers)
@@ -163,11 +163,17 @@ module.exports = function(proxy_options, processor_class) {
           username=parts[0],
           password=parts[1];
 
-      response.writeHead(200,{'Content-Type':'text/plain'});
-      response.end('username is "'+username+'" and password is "'+password+'"');
-      return
-      */
-    handle_request(that, request, response, "http");
+      if(username){
+          handle_request(that, request, response, "http");
+      }
+      else{
+          response.writeHead(407,{'Content-Type':'text/plain'});
+          response.end('the banditio proxy requires a username for tracking purposes. ');
+          return
+      }
+
+
+
   });
 
   // Handle connect request (for https)
