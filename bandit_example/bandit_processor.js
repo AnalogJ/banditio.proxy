@@ -1,10 +1,20 @@
 var Proxy = require('../bandit_proxy.js')
     , URL = require('url');
-
+var uuid = require('node-uuid');
+var socketio = require('socket.io-client');
 // Processor 
 simpleProcessor = function (proxy) {
     var url;
     var bufs = [];
+    var request_id = uuid.v1();
+
+    //Configure SocketIo Channel.
+    var socket_client = socketio.connect('http://localhost:3000/');
+    socket_client.on('connect', function() {
+        socket_client.emit('join', 'private_room' || request_id);
+    });
+
+
     var scriptElm = "\n<script type='text/javascript' src='jquery.min.1.2.js'></script>\n";
     var response_opts = {
         injectable: false,
@@ -66,6 +76,7 @@ simpleProcessor = function (proxy) {
         url = req_url;
         //console.log("[" + url.hostname + url.pathname + "] - Processor request event, url: " + URL.format(req_url));
         console.log('Request Headers', request.headers)
+        socket_client.emit('message', 'request headers');
     }
 
     this.handle_response = function (response) {
@@ -78,7 +89,7 @@ simpleProcessor = function (proxy) {
             response.headers['content-length'] = parseInt(response.headers['content-length']) + scriptElm.length;
             console.log(response.headers['content-length']);
         }
-
+        socket_client.emit('message', 'response headers');
     }
 
     this.handle_response_data = function (data) {
@@ -124,6 +135,7 @@ simpleProcessor = function (proxy) {
             }
             else {
                 //not injectable, but recordable, so send a message here to the listeners then send the buffer to the waiting user
+                socket_client.emit('message', 'response data');
                 return buf;
             }
         }
