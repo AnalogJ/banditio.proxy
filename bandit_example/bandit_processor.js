@@ -99,25 +99,22 @@ simpleProcessor = function (proxy) {
         if (response_opts.recordable || response_opts.injectable) {
 
             var buf = Buffer.concat(bufs);
-            var response_str = '';
-            if (response_opts.gzipped || response_opts.deflated) {
-                //TODO inflate or unzip content.
-                /*
-                 if(response_opts.gzipped){
-                 zlib.gunzip(buf, function(err, result){
-                 console.log(result.toString())
-                 });
-                 }
-                 else if(resp_content_encoding ==  'deflate'){
-                 zlib.inflate(bug, function(err, result){
-                 console.log(result.toString())
-                 })
-                 }
-                 */
+            var response_str = buf.toString();
+            /* THis should never be required any more. The accept-encoding header if overridden.
+            if(response_opts.gzipped){
+                zlib.gunzip(buf, function(err, result){
+                    console.log(result.toString())
+                });
+            }
+            else if(resp_content_encoding ==  'deflate'){
+                zlib.inflate(bug, function(err, result){
+                    console.log(result.toString())
+                })
             }
             else {
                 response_str = buf.toString();
             }
+            */
             if (response_opts.injectable) {
 
                 console.log('inject the script');
