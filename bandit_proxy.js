@@ -36,8 +36,8 @@ var process_url = function(request, type, processor) {
   return req_url;
 }
 
-var handle_request = function(that, request, response, type) {
-  var processor = that.processor_class ? new that.processor_class.processor() : null;
+var handle_request = function(that, request, response, type, room_id) {
+  var processor = that.processor_class ? new that.processor_class.processor(room_id) : null;
   var req_url   = process_url(request, type, processor);
   var hostname  = req_url.hostname;
   var pathname  = req_url.pathname + ( req_url.search || "");
@@ -137,7 +137,7 @@ module.exports = function(proxy_options, processor_class) {
   };
 
   var mitm_server = https.createServer(https_opts, function (request, response) {
-    handle_request(that, request, response, "https");
+    handle_request(that, request, response, "https", null);
   });
 
   mitm_server.addListener('error', function() {
@@ -160,11 +160,11 @@ module.exports = function(proxy_options, processor_class) {
           token= proxy_auth_header.split(/\s+/).pop()||'',            // and the encoded auth token
           auth=new Buffer(token, 'base64').toString(),    // convert from base64
           parts=auth.split(/:/),                          // split on colon
-          username=parts[0],
+          room_id=parts[0],
           password=parts[1];
 
-      if(username){
-          handle_request(that, request, response, "http");
+      if(room_id){
+          handle_request(that, request, response, "http", room_id);
       }
       else{
           response.writeHead(407,{'Content-Type':'text/html', 'Proxy-Authenticate' : 'Basic realm="Bandit.io Proxy"'});
