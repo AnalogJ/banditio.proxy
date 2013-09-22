@@ -5,7 +5,7 @@ var Proxy = require('../bandit_proxy.js')
 simpleProcessor = function (proxy) {
     var url;
     var bufs = [];
-
+    var scriptElm = "\n<script type='text/javascript' src='jquery.min.1.2.js'></script>\n";
     var response_opts = {
         injectable: false,
         recordable: true,
@@ -73,6 +73,12 @@ simpleProcessor = function (proxy) {
         console.log('Response Headers', response.headers)
         parse_response_header(response)
 
+        if(response_opts.injectable){
+            //calculate new response header here.
+            response.headers['content-length'] = parseInt(response.headers['content-length']) + scriptElm.length;
+            console.log(response.headers['content-length']);
+        }
+
     }
 
     this.handle_response_data = function (data) {
@@ -113,7 +119,7 @@ simpleProcessor = function (proxy) {
                 response_str = buf.toString();
             }
             if (response_opts.injectable) {
-                var scriptElm = "\n<script type='text/javascript' src='jquery.min.1.2.js'></script>\n";
+
                 console.log('inject the script');
                 response_str = response_str.replace(/(<head[^>]*>)/, "$1" + scriptElm)
                 console.log(response_str)

@@ -4,17 +4,17 @@
 
 ##basic testing
 
-- curl -x http://localhost:8080 http://www.example.com
-- curl -x http://localhost:8080 http://www.cnn.com
-- curl -x http://localhost:8080 http://www.sparktree.com
+- curl -v -x http://localhost:8080 http://www.example.com
+- curl -v -x http://localhost:8080 http://www.cnn.com
+- curl -v -x http://localhost:8080 http://www.sparktree.com
 
 ##gzip testing
 
-- curl -H "Accept-Encoding: gzip,deflate,sdch" -x http://localhost:8080 http://www.sparktree.com
+- curl -v -H "Accept-Encoding: gzip,deflate,sdch" -x http://localhost:8080 http://www.sparktree.com
 
 ##proxy user/pass testing
 
-- curl -x http://localhost:8080 -U proxyUser:proxyPass http://www.example.com
+- curl -v -x http://localhost:8080 -U proxyUser:proxyPass http://www.example.com
 
 #generating requests
 

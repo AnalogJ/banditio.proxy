@@ -46,14 +46,24 @@ var handle_request = function(that, request, response, type) {
 
   if(that.options.verbose) console.log(type.blue + " proxying to " +  url.format(req_url).green);
 
+  //set new proxy headers
+  var proxy_headers = {};
+  for(var prop in request.headers){
+      proxy_headers[prop] = request.headers[prop];
+  }
+  // force uncompresed
+  proxy_headers['accept-encoding'] = 'identity';
+  //TODO: delete proxy authentication header
+
+
   var request_options = {
       host: hostname
     , port: req_url.port || (type == "http" ? 80 : 443)
     , path: pathname
-    , headers: request.headers
+    , headers: proxy_headers
     , method: request.method
   }
-
+  console.log(request_options)
   var proxy_request = (req_url.protocol == "https:" ? https : http).request(request_options, function(proxy_response) {
     if(processor && processor.handle_response) processor.handle_response(proxy_response);
 
