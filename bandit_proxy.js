@@ -203,5 +203,5 @@ module.exports = function(proxy_options, processor_class) {
   })
 
   server.listen(this.options.proxy_port);
-  if(this.options.verbose) console.log('http proxy server '.blue + 'started '.green.bold + 'on port '.blue + (""+this.options.proxy_port).yellow);
+  console.log('http proxy server ' + 'started '.green.bold + 'on port ' + (""+this.options.proxy_port).yellow);
 }
