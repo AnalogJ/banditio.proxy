@@ -1,7 +1,8 @@
-var Proxy = require('../bandit_proxy.js')
+var Proxy = require('./bandit_proxy.js')
     , URL = require('url');
 var uuid = require('node-uuid');
 var socketio = require('socket.io-client');
+var nconf = require('nconf');
 // Processor 
 simpleProcessor = function (room_id) {
     var url;
@@ -9,11 +10,17 @@ simpleProcessor = function (room_id) {
     var _room_id = room_id
     var _resource_id = uuid.v1();
 
+    //configuration
+    nconf.argv()
+        .env()
+        .file({ file: './nconf/config.json' });
+
+
     //Configure SocketIo Channel.
     var socket_client;
-
-    if(room_id){
-        socket_client = socketio.connect('http://localhost:3000/');
+    var socketio_path = nconf.get('socketio_path')
+    if(room_id && socketio_path){
+        socket_client = socketio.connect(socketio_path);
         socket_client.on('connect', function() {
             socket_client.emit('join', room_id);
         });
