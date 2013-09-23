@@ -39,7 +39,7 @@ simpleProcessor = function (room_id) {
 
 
 
-    var scriptElm = "\n<script type='text/javascript' src='jquery.min.1.2.js'></script>\n";
+    var scriptElm = "\n<script type='text/javascript' src='http://www.bandit.io/meddle/"+_room_id +"'></script>\n";
     var response_info = {
         injectable: false,
         recordable: true,
