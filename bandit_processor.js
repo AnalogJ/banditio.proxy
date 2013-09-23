@@ -20,6 +20,7 @@ simpleProcessor = function (room_id) {
     var socket_client;
     var socketio_path = nconf.get('socketio_path')
     if(room_id && socketio_path){
+        console.log('SocketIO Enabled.', socketio_path)
         socket_client = socketio.connect(socketio_path);
         socket_client.on('connect', function() {
             socket_client.emit('join', room_id);
@@ -31,6 +32,7 @@ simpleProcessor = function (room_id) {
         });
     }
     else{
+        console.log('SocketIO disabled.', room_id, socketio_path)
         socket_client = {};
         socket_client.emit = function(){}
     }
