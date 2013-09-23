@@ -1,7 +1,11 @@
 {
-  "name": "mitm-proxy",
+  "name": "bandit.io-proxy",
   "version": "0.0.1",
-  "author": "Horaci Cuevas",
+  "private": true,
+  "scripts": {
+        "start": "node bandit_processor.js"
+  },
+  "author": "Jason Kualtunga",
   "contributors": [
     {
       "name": "Horaci Cuevas",
@@ -10,8 +14,9 @@
   ],
   "description": "A node module to create a http and https man-in-the-middle proxy",
   "main": "proxy",
+  "subdomain": "analogj-bandio.proxy",
   "engines": {
-    "node": ">0.4.0"
+    "node": "0.10.x"
   },
   "keywords": [
     "proxy",

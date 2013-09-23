@@ -171,4 +171,4 @@ simpleProcessor = function (room_id) {
 };
 
 // Proxy
-new Proxy({proxy_port: 8080, verbose: false}, simpleProcessor);
+new Proxy({proxy_port: process.env.PORT ||8080, verbose: false}, simpleProcessor);
